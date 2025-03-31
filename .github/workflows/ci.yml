@@ -100,7 +100,7 @@ jobs:
       - run: npm run build
       - run: npm run ${{matrix.task}}
       - name: Coveralls Parallel
-        uses: coverallsapp/github-action@v2.2.3
+        uses: coverallsapp/github-action@v2.3.4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: run-${{ matrix.task }}
@@ -111,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
-        uses: coverallsapp/github-action@v2.2.3
+        uses: coverallsapp/github-action@v2.3.4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
@@ -125,7 +125,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: docker/setup-qemu-action@v3.0.0
+      - uses: docker/setup-qemu-action@v3.3.0
         with:
           platforms: arm64
       - uses: docker/setup-buildx-action@v3
@@ -135,7 +135,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Deploy main
         if: github.ref == 'refs/heads/main'
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64,linux/arm64
           push: true
@@ -144,7 +144,7 @@ jobs:
           cache-to: type=gha,mode=max
       - name: Deploy Tag
         if: (github.event_name == 'release' && github.event.action == 'released')
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64,linux/arm64
           push: true

@@ -42,6 +42,12 @@ export class Webhook extends BaseEntity {
   @Column({ default: true })
   sendMessages: boolean;
 
+  @Column({ default: true })
+  sendReorgs: boolean;
+
+  @Column({ default: true })
+  sendDelegates: boolean;
+
   /**
    * Check if event chainId matches the one of the webhook (everything will match if webhook chains are empty). Check if event
    * type matches the flags enabled for the webhook
@@ -71,7 +77,12 @@ export class Webhook extends BaseEntity {
         (this.sendMessages &&
           (message.type === 'MESSAGE_CREATED' ||
             message.type === 'MESSAGE_CONFIRMATION')) ||
-        (this.sendSafeCreations && message.type === 'SAFE_CREATED'))
+        (this.sendSafeCreations && message.type === 'SAFE_CREATED') ||
+        (this.sendReorgs && message.type === 'REORG_DETECTED') ||
+        (this.sendDelegates &&
+          (message.type === 'NEW_DELEGATE' ||
+            message.type === 'UPDATED_DELEGATE' ||
+            message.type === 'DELETED_DELEGATE')))
     );
   }
 }
